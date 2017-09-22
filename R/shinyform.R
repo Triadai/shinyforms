@@ -9,6 +9,7 @@ STORAGE_TYPES <- list(
   GOOGLE_SHEETS = "gsheets",
   DROPBOX = "dropbox",
   AMAZON_S3 = "s3"
+  ZAPIER_API = "zapierapi"
 )
 
 labelMandatory <- function(label) {
@@ -32,12 +33,13 @@ appCSS <- "
 .shinyforms-ui .pw-box { margin-top: -20px; }
 .shinyforms-ui .created-by { font-size: 12px; font-style: italic; color: #777; margin: 25px auto 10px;}
 "
-
 saveData <- function(data, storage) {
   if (storage$type == STORAGE_TYPES$FLATFILE) {
     saveDataFlatfile(data, storage)
   } else if (storage$type == STORAGE_TYPES$GOOGLE_SHEETS) {
     saveDataGsheets(data, storage)
+  } else if (storage$type == STORAGE_TYPES$ZAPIER_API) {
+    saveZapierAPI(data, storage)
   }
 }
 
@@ -77,6 +79,13 @@ saveDataGsheets <- function(data, storage) {
   gs_add_row(gs_key(storage$key), input = data)
 }
 loadDataGsheets <- function() {
+  gs_read_csv(gs_key(storage$key))
+}
+
+saveZapierAPI <- function(data, storage) {
+  gs_add_row(gs_key(storage$key), input = data)
+}
+loadZapierAPI <- function() {
   gs_read_csv(gs_key(storage$key))
 }
 
